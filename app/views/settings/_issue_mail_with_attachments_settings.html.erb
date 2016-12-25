@@ -1,0 +1,35 @@
+
+<fieldset>
+  <legend><%= t('view.issue_mail_with_attachments.legend_attachment_setting') %></legend>
+  <p>
+    <label><%= t('view.issue_mail_with_attachments.enable_mail_attachment') %></label>
+    <%= check_box_tag 'settings[enable_mail_attachments]', true, @settings[:enable_mail_attachments] %><br />
+    <em><%= t('view.issue_mail_with_attachments.enable_mail_attachment_desc') %></em>
+  </p>
+  <p>
+    <label><%= t('view.issue_mail_with_attachments.attach_all_files_to_notification') %></label>
+    <%= check_box_tag 'settings[attach_all_to_notification]', true, @settings[:attach_all_to_notification] %><br />
+    <em><%= t('view.issue_mail_with_attachments.attach_all_files_to_notification_desc') %></em>
+  </p>
+</fieldset>
+
+<fieldset>
+  <legend><%= t('view.issue_mail_with_attachments.legend_mail_subject_template') %></legend>
+  <p><%= t('view.issue_mail_with_attachments.warning_mail_subject_template') %></p>
+  <p>
+    <label><%= t('view.issue_mail_with_attachments.mail_subject') %></label>
+    <%= text_field_tag 'settings[mail_subject]', @settings[:mail_subject], size:80 %><br />
+    <em><%= t('view.issue_mail_with_attachments.mail_subject_desc') %></em>
+  </p>
+  <p>
+    <label><%= t('view.issue_mail_with_attachments.mail_subject_without_status') %></label>
+    <%= text_field_tag 'settings[mail_subject_wo_status]', @settings[:mail_subject_wo_status], size:80 %><br />
+    <em><%= t('view.issue_mail_with_attachments.mail_subject_without_status_desc') %></em>
+  </p>
+  <p>
+    <label><%= t('view.issue_mail_with_attachments.mail_subject_for_attachment_mail') %></label>
+    <%= text_field_tag 'settings[mail_subject_4_attachment]', @settings[:mail_subject_4_attachment], size:80 %><br />
+    <em><%= t('view.issue_mail_with_attachments.mail_subject_for_attachment_mail_desc') %></em>
+  </p>
+</fieldset>
+

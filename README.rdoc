@@ -1,0 +1,3 @@
+= Redmine issue_mail_with_attachments plugin
+
+Send issue notification mail with file attachments.
