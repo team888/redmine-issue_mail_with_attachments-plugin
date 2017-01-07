@@ -1,0 +1,23 @@
+# Japanese strings go here for Rails i18n
+ja:
+  view:
+    issue_mail_with_attachments:
+      legend_attachment_setting: "添付ファイル設定"
+    
+      enable_mail_attachment: "メール添付の有効化"
+      enable_mail_attachment_desc: "メールにファイルを添付して送信します。"
+      
+      attach_all_files_to_notification: "通知メールへすべてのファイルを添付"
+      attach_all_files_to_notification_desc: "すべてのファイルを元の通知メールに添付します。注意： 添付サイズがメールサーバーの制限サイズを超えた場合、メールはリジェクトされます。この設定をオフにした場合、通知メールはこれまで通り送られ、各ファイルはそれぞれ専用の各１通のメールに添付されて送信されます。"
+
+      legend_mail_subject_template: "メール タイトル設定"
+      warning_mail_subject_template: "このセクションは上級ユーザ向けです。タイトル文字列生成のための Ruby 言語によるオブジェクト アクセス表記等の理解が必要です。"
+      
+      mail_subject: "メール タイトル"
+      mail_subject_desc: "メール タイトルのテンプレートです。"
+
+      mail_subject_without_status: "ステータス変更なしの場合のメール タイトル"
+      mail_subject_without_status_desc: "ステータスの変更がなかった場合に使用されるメール タイトルのテンプレートです。"
+
+      mail_subject_for_attachment_mail: "添付用メール向けのメール タイトル"
+      mail_subject_for_attachment_mail_desc: "添付ファイル送信用メールのためのメール タイトルのテンプレートです。このテンプレートで生成されたタイトル文字列の後に、添付ファイル名が追加されます。メモ： この設定は [通知メールへすべてのファイルを添付] チェックボックスがオフの場合のみ使用されます。"
