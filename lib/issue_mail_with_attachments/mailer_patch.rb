@@ -32,11 +32,11 @@ module IssueMailWithAttachments
         # attach all files on original notification mail
         #------------------------------------------------------------
         if attach_all == true and with_att == true
-          unless Setting.plain_text_mail?
+          #unless Setting.plain_text_mail?
             issue.attachments.each do |attachment|
               attachments[attachment.filename] = File.binread(attachment.diskfile)
             end
-          end
+          #end
         end
         # plugin setting value: mail subject
         s = Setting.plugin_issue_mail_with_attachments['mail_subject']
@@ -59,7 +59,7 @@ module IssueMailWithAttachments
           ss = eval("\"#{ss}\"")
 #          ss = "[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] |att| "
           # send mail with attachments
-          unless Setting.plain_text_mail?
+          #unless Setting.plain_text_mail?
             issue.attachments.each do |attachment|
               ml.deliver    # last deliver method will be called in caller - deliver_issue_edit method
               initialize
@@ -76,7 +76,7 @@ module IssueMailWithAttachments
                 format.html { render html: "#{attachment.filename}".html_safe }
               end
             end
-          end
+          #end
         end
       end
 
@@ -100,13 +100,13 @@ module IssueMailWithAttachments
         # attach all files on original notification mail
         #------------------------------------------------------------
         if attach_all == true and with_att == true
-          unless Setting.plain_text_mail?
+          #unless Setting.plain_text_mail?
             journal.details.each do |detail|
               if detail.property == 'attachment' && attachment = Attachment.find_by_id(detail.prop_key)
                 attachments[attachment.filename] = File.binread(attachment.diskfile)
               end
             end
-          end
+          #end
         end
         if journal.new_value_for('status_id')
           # plugin setting value: mail subject
@@ -136,7 +136,7 @@ module IssueMailWithAttachments
 #          ss = "[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] |att| "
 
           # send mail with attachments
-          unless Setting.plain_text_mail?
+          #unless Setting.plain_text_mail?
             journal.details.each do |detail|
               if detail.property == 'attachment' && attachment = Attachment.find_by_id(detail.prop_key)
                 ml.deliver    # last deliver method will be called in caller - deliver_issue_edit method
@@ -156,7 +156,7 @@ module IssueMailWithAttachments
                 end
               end
             end
-          end
+          #end
         end
       end
     end
