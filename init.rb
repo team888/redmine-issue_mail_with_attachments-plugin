@@ -14,13 +14,18 @@ default_settings = {
     :mail_subject_wo_status => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] #{issue.subject}',
     :mail_subject_4_attachment => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] |att| '
 }
-default_settings = ActionController::Parameters.new(default_settings)
+
+if Redmine::VERSION::MAJOR == 2
+  default_settings = HashWithIndifferentAccess.new(default_settings)
+else
+  default_settings = ActionController::Parameters.new(default_settings)
+end
 
 Redmine::Plugin.register :issue_mail_with_attachments do
   name 'Issue Mail With Attachments plugin'
   author 'team888'
   description 'Send issue notification mail with file attachments'
-  version '0.0.1'
+  version '0.0.2'
   url 'https://github.com/team888/redmine-issue_mail_with_attachments-plugin'
   author_url 'https://github.com/team888'
 
