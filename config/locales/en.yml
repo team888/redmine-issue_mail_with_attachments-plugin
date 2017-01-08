@@ -16,7 +16,7 @@ en:
       mail_subject: "Mail subject"
       mail_subject_desc: "Definition of mail subject template."
 
-      mail_subject_without_status: "Mail subject without status　change"
+      mail_subject_without_status: "Mail subject without status change"
       mail_subject_without_status_desc: "Definition of mail subject template used when no status change occured."
 
       mail_subject_for_attachment_mail: "Mail subject for attachment mail"
