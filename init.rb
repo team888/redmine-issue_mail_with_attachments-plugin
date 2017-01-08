@@ -24,7 +24,7 @@ end
 Redmine::Plugin.register :issue_mail_with_attachments do
   name 'Issue Mail With Attachments plugin'
   author 'team888'
-  description 'Send issue notification mail with file attachments'
+  description 'With this plugin, you can send out newly attached files on issues via usual issue notification mails or dedicated mails as attachments.'
   version '0.0.2'
   url 'https://github.com/team888/redmine-issue_mail_with_attachments-plugin'
   author_url 'https://github.com/team888'
