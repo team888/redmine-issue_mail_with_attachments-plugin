@@ -12,7 +12,14 @@ With this plugin, you can send out newly attached files on issues via usual issu
 2. Open \[Administration] > [Plugins], click [Configure] link on [Issue Mail With Attachments plugin].
 3. Set configuration items as you want. Besides attachment settings such as enable/disable, advanced user can optionally change mail subject string by modifying template definition here.
 
+Configuration UI
 ![UI image](ui.png "UI image")
+
+Chinese Configuration UI
+![Chinese UI image](ui-zh.png "Chinese UI image")
+
+Japanese Configuration UI
+![Japanese UI image](ui-ja.png "Japanese UI image")
 
 ## Usage
 1. Manipulate Redmine issues as usual, issue attachment files are sent out with notification mails at the time of issue creation and update.
