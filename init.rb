@@ -10,6 +10,7 @@
 default_settings = {
     :enable_mail_attachments => true,
     :attach_all_to_notification => false,
+    :attach_only_for_project => '1',
     :mail_subject => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] (#{issue.status.name}) #{issue.subject}',
     :mail_subject_wo_status => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] #{issue.subject}',
     :mail_subject_4_attachment => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] |att| '

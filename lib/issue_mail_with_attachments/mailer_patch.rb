@@ -25,7 +25,11 @@ module IssueMailWithAttachments
         with_att = Setting.plugin_issue_mail_with_attachments['enable_mail_attachments'].to_s.eql?('true') ? true : false
         # plugin setting value: attach all files on original notification mail
         attach_all = Setting.plugin_issue_mail_with_attachments['attach_all_to_notification'].to_s.eql?('true') ? true : false
+        # plugin setting value: only attach for specified projects
+        project_map = Setting.plugin_issue_mail_with_attachments['attach_only_for_project'].to_s.split(",").map { |s| s.to_i }
+        project_att = project_map.include?(issue.project_id)
 
+        
         # little bit tricky way, really work ... ?
         initialize
         #------------------------------------------------------------
@@ -108,6 +112,9 @@ module IssueMailWithAttachments
         with_att = Setting.plugin_issue_mail_with_attachments['enable_mail_attachments'].to_s.eql?('true') ? true : false
         # plugin setting value: attach all files on original notification mail
         attach_all = Setting.plugin_issue_mail_with_attachments['attach_all_to_notification'].to_s.eql?('true') ? true : false
+        # plugin setting value: only attach for specified projects
+        project_map = Setting.plugin_issue_mail_with_attachments['attach_only_for_project'].to_s.split(",").map { |s| s.to_i }
+        project_att = project_map.include?(journal.issue.project_id)
 
         issue = journal.journalized
         # little bit tricky way, really work ... ?

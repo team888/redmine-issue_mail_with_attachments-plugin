@@ -10,6 +10,9 @@ en:
       attach_all_files_to_notification: "Attach all files to notification"
       attach_all_files_to_notification_desc: "Attach all files to original notification mail. NOTE: Notification will be rejected by mail server when attachment size exceed server limit. If you disable this checkbox, original notification mail is sent as it is and each files will be sent by own dedicated mail."
 
+      attach_only_for_project: "Only for these projects"
+      attach_only_for_project_desc: "Only send Attachments for the following projects (comma separated)"
+
       legend_mail_subject_template: "Mail Subject Template"
       warning_mail_subject_template: "This section is for advanced user only. Need knowledge of Ruby object access notation etc for subject string generation."
       
