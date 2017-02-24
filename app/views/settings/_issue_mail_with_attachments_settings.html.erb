@@ -11,6 +11,11 @@
     <%= check_box_tag 'settings[attach_all_to_notification]', true, @settings[:attach_all_to_notification] %><br />
     <em><%= t('view.issue_mail_with_attachments.attach_all_files_to_notification_desc') %></em>
   </p>
+  <p>
+    <label><%= t('view.issue_mail_with_attachments.attach_only_for_project') %></label>
+    <%= text_field_tag 'settings[attach_only_for_project]', @settings[:attach_only_for_project], size:80 %><br />
+    <em><%= t('view.issue_mail_with_attachments.attach_only_for_project_desc') %></em>
+  </p>
 </fieldset>
 
 <fieldset>
