@@ -7,6 +7,8 @@
 # Terms of use:
 # - GNU GENERAL PUBLIC LICENSE Version 2
 #*******************************************************************************
+Rails.logger.info 'Starting issue_mail_with_attachments Redmine plugin'
+
 default_settings = {
     :enable_mail_attachments => true,
     :attach_all_to_notification => false,

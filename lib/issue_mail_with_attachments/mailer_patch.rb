@@ -16,6 +16,10 @@ module IssueMailWithAttachments
       # monkey patch for issue_add method of Mailer class
       #=========================================================
       def issue_add_with_attachments(issue, to_users, cc_users)
+        prev_logger_lvl = nil
+        prev_logger_lvl = Rails.logger.level
+        Rails.logger.level = Logger::DEBUG
+        Rails.logger.debug "def issue_add_with_attachments"
         #------------------------------------------------------------
         # call original method
         #------------------------------------------------------------
@@ -28,7 +32,10 @@ module IssueMailWithAttachments
         # plugin setting value: only attach for specified projects
         project_map = Setting.plugin_issue_mail_with_attachments['attach_only_for_project'].to_s.split(",").map { |s| s.to_i }
         project_att = project_map.include?(issue.project_id)
-
+        if !project_map.empty? and project_att == false 
+          with_att = false
+        end
+        Rails.logger.debug "  with_att:#{with_att}, attach_all: #{attach_all}"
         
         # little bit tricky way, really work ... ?
         initialize
@@ -38,6 +45,7 @@ module IssueMailWithAttachments
         if attach_all == true and with_att == true
           #unless Setting.plain_text_mail?
             issue.attachments.each do |attachment|
+              Rails.logger.debug "  att with notification: #{attachment.filename}"
               attachments[attachment.filename] = File.binread(attachment.diskfile)
             end
           #end
@@ -71,6 +79,7 @@ module IssueMailWithAttachments
           # send mail with attachments
           #unless Setting.plain_text_mail?
             issue.attachments.each do |attachment|
+              Rails.logger.debug "  att with notification: #{attachment.filename}"
               ml.deliver    # last deliver method will be called in caller - deliver_issue_edit method
               initialize
               attachments[attachment.filename] = File.binread(attachment.diskfile)
@@ -98,12 +107,17 @@ module IssueMailWithAttachments
             end
           #end
         end
+        Rails.logger.level = prev_logger_lvl if prev_logger_lvl
       end
 
       #=========================================================
       # monkey patch for issue_edit method of Mailer class
       #=========================================================
       def issue_edit_with_attachments(journal, to_users, cc_users)
+        prev_logger_lvl = nil
+        prev_logger_lvl = Rails.logger.level
+        Rails.logger.level = Logger::DEBUG
+        Rails.logger.debug "def issue_edit_with_attachments"
         #------------------------------------------------------------
         # call original method
         #------------------------------------------------------------
@@ -115,6 +129,10 @@ module IssueMailWithAttachments
         # plugin setting value: only attach for specified projects
         project_map = Setting.plugin_issue_mail_with_attachments['attach_only_for_project'].to_s.split(",").map { |s| s.to_i }
         project_att = project_map.include?(journal.issue.project_id)
+        if !project_map.empty? and project_att == false 
+          with_att = false
+        end
+        Rails.logger.debug "  with_att:#{with_att}, attach_all: #{attach_all}"
 
         issue = journal.journalized
         # little bit tricky way, really work ... ?
@@ -126,6 +144,7 @@ module IssueMailWithAttachments
           #unless Setting.plain_text_mail?
             journal.details.each do |detail|
               if detail.property == 'attachment' && attachment = Attachment.find_by_id(detail.prop_key)
+                Rails.logger.debug "  att with notification: #{attachment.filename}"
                 attachments[attachment.filename] = File.binread(attachment.diskfile)
               end
             end
@@ -168,6 +187,7 @@ module IssueMailWithAttachments
           #unless Setting.plain_text_mail?
             journal.details.each do |detail|
               if detail.property == 'attachment' && attachment = Attachment.find_by_id(detail.prop_key)
+                Rails.logger.debug "  att with dedicate mail: #{attachment.filename}"
                 ml.deliver    # last deliver method will be called in caller - deliver_issue_edit method
                 # little bit tricky way, really work ... ?
                 initialize
@@ -197,6 +217,7 @@ module IssueMailWithAttachments
             end
           #end
         end
+        Rails.logger.level = prev_logger_lvl if prev_logger_lvl
       end
     end
   end
