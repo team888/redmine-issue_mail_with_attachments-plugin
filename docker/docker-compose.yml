@@ -1,0 +1,29 @@
+mysql:
+  image: mysql:5.7.14
+  volumes:
+    - ./mysql/conf:/etc/mysql/conf.d
+#    - /c/Users/youraccount/redmine-issue_mail_with_attachments-plugin/docker/mysql/conf:/etc/mysql/conf.d
+  environment:
+    MYSQL_ROOT_PASSWORD: password
+redmine:
+  image: sameersbn/redmine:3.2.4
+  links:
+    - mysql:mysql
+  environment:
+    DB_NAME: redmine
+    DB_USER: root
+    DB_PASS: password
+    REDMINE_PORT: 10083
+    DB_ENCODING: utf8mb4
+    SMTP_HOST: smtp.gmail.com
+    SMTP_PORT: 587
+    SMTP_USER: youraccount@gmail.com
+    SMTP_PASS: yourpassword
+
+  volumes:
+    - ../src:/home/redmine/data/plugins
+#    - '/c/Users/youraccount/redmine-issue_mail_with_attachments-plugin/src:/home/redmine/data/plugins'
+    - ./log:/home/redmine/redmine/log
+#    - '/c/Users/youraccount/redmine-issue_mail_with_attachments-plugin/docker/log:/home/redmine/redmine/log'
+  ports:
+    - "10083:80"
