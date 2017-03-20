@@ -26,16 +26,16 @@ module IssueMailWithAttachments
         ml = issue_add_without_attachments(issue, to_users, cc_users)
 
         # plugin setting value: enable/disable file attachments
-        with_att = Setting.plugin_issue_mail_with_attachments['enable_mail_attachments'].to_s.eql?('true') ? true : false
+        att_enabled = Setting.plugin_issue_mail_with_attachments['enable_mail_attachments'].to_s.eql?('true') ? true : false
         # plugin setting value: attach all files on original notification mail
         attach_all = Setting.plugin_issue_mail_with_attachments['attach_all_to_notification'].to_s.eql?('true') ? true : false
-        # plugin setting value: only attach for specified projects
-        project_map = Setting.plugin_issue_mail_with_attachments['attach_only_for_project'].to_s.split(",").map { |s| s.to_i }
-        project_att = project_map.include?(issue.project_id)
-        if !project_map.empty? and project_att == false 
-          with_att = false
-        end
-        Rails.logger.debug "  with_att:#{with_att}, attach_all: #{attach_all}"
+        # project level plugin setting: enabled/disabled as project module setting
+        mod_enabled = issue.project.module_enabled?("issue_mail_with_attachments_plugin")
+
+        with_att = true
+        with_att = false unless att_enabled
+        with_att = false unless mod_enabled
+        Rails.logger.debug "  with_att:#{with_att}, att_enabled: #{att_enabled}, attach_all: #{attach_all}, mod_enabled: #{mod_enabled}"
         
         # little bit tricky way, really work ... ?
         initialize
@@ -123,16 +123,16 @@ module IssueMailWithAttachments
         #------------------------------------------------------------
         ml = issue_edit_without_attachments(journal, to_users, cc_users)
         # plugin setting value: enable/disable file attachments
-        with_att = Setting.plugin_issue_mail_with_attachments['enable_mail_attachments'].to_s.eql?('true') ? true : false
+        att_enabled = Setting.plugin_issue_mail_with_attachments['enable_mail_attachments'].to_s.eql?('true') ? true : false
         # plugin setting value: attach all files on original notification mail
         attach_all = Setting.plugin_issue_mail_with_attachments['attach_all_to_notification'].to_s.eql?('true') ? true : false
-        # plugin setting value: only attach for specified projects
-        project_map = Setting.plugin_issue_mail_with_attachments['attach_only_for_project'].to_s.split(",").map { |s| s.to_i }
-        project_att = project_map.include?(journal.issue.project_id)
-        if !project_map.empty? and project_att == false 
-          with_att = false
-        end
-        Rails.logger.debug "  with_att:#{with_att}, attach_all: #{attach_all}"
+        # project level plugin setting: enabled/disabled as project module setting
+        mod_enabled = journal.journalized.project.module_enabled?("issue_mail_with_attachments_plugin")
+
+        with_att = true
+        with_att = false unless att_enabled
+        with_att = false unless mod_enabled
+        Rails.logger.debug "  with_att:#{with_att}, att_enabled: #{att_enabled}, attach_all: #{attach_all}, mod_enabled: #{mod_enabled}"
 
         issue = journal.journalized
         # little bit tricky way, really work ... ?

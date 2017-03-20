@@ -12,7 +12,6 @@ Rails.logger.info 'Starting issue_mail_with_attachments Redmine plugin'
 default_settings = {
     :enable_mail_attachments => true,
     :attach_all_to_notification => false,
-    :attach_only_for_project => '1',
     :mail_subject => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] (#{issue.status.name}) #{issue.subject}',
     :mail_subject_wo_status => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] #{issue.subject}',
     :mail_subject_4_attachment => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] |att| '
@@ -33,7 +32,15 @@ Redmine::Plugin.register :issue_mail_with_attachments do
   author_url 'https://github.com/team888'
 
   settings :default => default_settings, :partial => 'settings/issue_mail_with_attachments_settings'
+  
+  # show enable/disable on project setting
+  project_module :issue_mail_with_attachments_plugin do
+    # hidden dummy permission
+    permission :dummy_permission, { }, :public => true, :read => true
+  end
+
 end
+
 
 require "issue_mail_with_attachments/mailer_patch.rb"
 
