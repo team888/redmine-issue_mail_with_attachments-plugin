@@ -1,20 +1,23 @@
 = Redmine issue_mail_with_attachments plugin
 
-With this plugin, you can send out newly attached files on issues via usual issue notification mails or dedicated mails as attachments.
+With this plugin, you can mail out new attachment files on Issue pages via issue notification mails.
 
 == Installation
 1. Downloaded and extract plugin zip file.
-1. Copy "issue_mail_with_attachments" folder in extracted folder into redmine's plugins folder.
+2. Copy "issue_mail_with_attachments" folder under "src" folder into redmine's "plugins" folder.
 3. Restart your Redmine servers.
 
 == Setup
 1. Login to your redmine with admin privilege account.
 2. Open \[Administration] > [Plugins], click [Configure] link on [Issue Mail With Attachments plugin].
-3. Enter project IDs you want to send attachment mail into [only for projects] fields.
-4. Set configuration items as you want. Besides attachment settings such as enable/disable, advanced user can optionally change mail subject string by modifying template definition here.
+3. Set plugin configurations. Note:
+   - With disabling [Attach all files to notification] checkbox, each attachments are sent out via dedicated mails (default/recommend setting).
+   - If enabling [Enable project level control] checkbox, to enable plugin function in each projects, you need to enable [issue mail with attachments plugin] item in each project's Settings page.
+   - With entering custom filed name in [Custom field name to enable attachment] field, you can control each issue level attachment or not by enabling/disabling defined custom field (Boolean-format) of this name.
 
 == Usage
 1. Manipulate Redmine issues as usual, issue attachment files are sent out with notification mails at the time of issue creation and update.
 
 == Compatibility
-Redmine 2.6 to 3.3 ( checked on 2.6 and 3.3 so far )
+Redmine 3.0 to 3.4
+Ruby 2.0 and above

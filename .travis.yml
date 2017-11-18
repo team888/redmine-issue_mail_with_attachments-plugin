@@ -1,0 +1,32 @@
+language: ruby
+rvm:
+  - 2.3
+  - 2.2
+  - 2.1
+  - 2.0
+branches:
+  only:
+    - master
+    - refactoring-testing
+env:
+  - REDMINE_VERSION=3.4-stable VERBOSE=yes
+  - REDMINE_VERSION=3.3-stable VERBOSE=yes
+  - REDMINE_VERSION=3.2-stable VERBOSE=yes
+  - REDMINE_VERSION=3.1-stable VERBOSE=yes
+  - REDMINE_VERSION=3.0-stable VERBOSE=yes
+script:
+  - export PLUGIN=issue_mail_with_attachments
+  - export WORKSPACE=$(pwd)/workspace
+  - export PATH_TO_PLUGIN=$(pwd)/src/issue_mail_with_attachments
+  - export PATH_TO_REDMINE=$WORKSPACE/redmine
+  - mkdir $WORKSPACE
+  - bash -x ./.travis-init.sh -r || exit 1
+  - bash -x ./.travis-init.sh -i || exit 1
+  - bash -x ./.travis-init.sh -t || exit 1
+  - bash -x ./.travis-init.sh -u || exit 1
+
+before_install:
+  - "phantomjs --version"
+  
+before_script:
+  - phantomjs --webdriver=4444 >/dev/null 2>&1 & 

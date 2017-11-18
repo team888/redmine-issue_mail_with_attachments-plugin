@@ -10,18 +10,18 @@
 Rails.logger.info 'Starting issue_mail_with_attachments Redmine plugin'
 
 default_settings = {
-    :enable_mail_attachments => true,
-    :attach_all_to_notification => false,
+    :enable_mail_attachments => 'true',
+    :attach_all_to_notification => 'false',
     :mail_subject => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] (#{issue.status.name}) #{issue.subject}',
     :mail_subject_wo_status => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] #{issue.subject}',
     :mail_subject_4_attachment => '[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] |att| '
 }
 
-if Redmine::VERSION::MAJOR == 2
-  default_settings = HashWithIndifferentAccess.new(default_settings)
-else
+#if Redmine::VERSION::MAJOR == 2
+#  default_settings = HashWithIndifferentAccess.new(default_settings)
+#else
   default_settings = ActionController::Parameters.new(default_settings)
-end
+#end
 
 Redmine::Plugin.register :issue_mail_with_attachments do
   name 'Issue Mail With Attachments plugin'
@@ -30,6 +30,7 @@ Redmine::Plugin.register :issue_mail_with_attachments do
   version '0.9.0'
   url 'http://www.redmine.org/plugins/issue_mail_with_attachments'
   author_url 'https://github.com/team888'
+  requires_redmine :version_or_higher => '3.0'
 
   settings :default => default_settings, :partial => 'settings/issue_mail_with_attachments_settings'
   

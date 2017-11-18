@@ -12,12 +12,12 @@ en:
 
       legend_project_level_control: "Project Level Control"
       enable_project_level_control: "Enable project level control"
-      enable_project_level_control_desc: "You need to enable [issue mail with attachments plugin] in each project's Settings page to enable attachment function of this plugin."
+      enable_project_level_control_desc: "After enabling this, you need to enable [issue mail with attachments plugin] in each project's Settings page to enable attachment function of this plugin."
       
       
       legend_issue_level_control: "Issue Level Control"
       field_name_to_enable_att: "Custom field name to enable attachment"
-      field_name_to_enable_att_desc: "After you define Boolean-format custom field named above for the issue page of any projects, attachment function of this plugin works only if defined field is ON state for each issue pages. Defined boolean field can be any of drop-down list/checkboxes/radio buttons with default value you want."
+      field_name_to_enable_att_desc: "After enabling this and define Boolean-format custom field named above for the issue page of any projects, attachment function of this plugin works only if defined field is ON state on each issue pages. It means you can make defined field ON if need attachments or OFF if no attachments needed. Defined boolean field can be any of drop-down list/checkboxes/radio buttons with default value you want. Projects which not assigned defined field are not affected by this setting."
       
       
       attach_only_for_project: "Only for these projects"
