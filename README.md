@@ -1,6 +1,7 @@
 # Redmine issue_mail_with_attachments plugin
-[![Build Status](https://travis-ci.org/team888/redmine-issue_mail_with_attachments-plugin.svg?branch=refactoring-testing)](https://travis-ci.org/team888/redmine-issue_mail_with_attachments-plugin)
-[![Coverage Status](https://coveralls.io/repos/github/team888/redmine-issue_mail_with_attachments-plugin/badge.svg?branch=refactoring-testing)](https://coveralls.io/github/team888/redmine-issue_mail_with_attachments-plugin?branch=refactoring-testing)
+[![Build Status](https://travis-ci.org/team888/redmine-issue_mail_with_attachments-plugin.svg?branch=master)](https://travis-ci.org/team888/redmine-issue_mail_with_attachments-plugin)
+[![Coverage Status](https://coveralls.io/repos/github/team888/redmine-issue_mail_with_attachments-plugin/badge.svg?branch=master)](https://coveralls.io/github/team888/redmine-issue_mail_with_attachments-plugin?branch=master)
+[![Maintainability](https://api.codeclimate.com/v1/badges/258aac68a017b5166e0d/maintainability)](https://codeclimate.com/github/team888/redmine-issue_mail_with_attachments-plugin/maintainability)
 
 With this plugin, you can mail out new attachment files on Issue pages via issue notification mails.
 
