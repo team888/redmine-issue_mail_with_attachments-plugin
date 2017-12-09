@@ -102,10 +102,30 @@ module IssueMailWithAttachments
       #=========================================================
       # send with dedicated mail
       #=========================================================
-      def send_with_dedicated_mail(to_users, cc_users, title, attachment)
+      def send_first_mail(to_users, cc_users, title, issue)
+        redmine_headers 'Project' => issue.project.identifier,
+                    'Issue-Id' => issue.id,
+                    'Issue-Author' => issue.author.login
+        redmine_headers 'Issue-Assignee' => issue.assigned_to.login if issue.assigned_to
+        ml = mail :to => to_users,
+         :cc => cc_users,
+         :subject => title
+        return ml
+      end
+      
+      #=========================================================
+      # send with dedicated mail
+      #=========================================================
+      def send_with_dedicated_mail(to_users, cc_users, title, attachment, issue)
         initialize
         attachments[attachment.filename] = File.binread(attachment.diskfile)
         new_title = title + attachment.filename
+        
+        redmine_headers 'Project' => issue.project.identifier,
+                    'Issue-Id' => issue.id,
+                    'Issue-Author' => issue.author.login
+        redmine_headers 'Issue-Assignee' => issue.assigned_to.login if issue.assigned_to
+
         ml = mail( :to => to_users,
           :cc => cc_users,
           :subject => new_title
@@ -152,9 +172,7 @@ module IssueMailWithAttachments
         #-----------
         # mail
         #-----------
-        ml = mail :to => to_users,
-         :cc => cc_users,
-         :subject => title
+        ml = send_first_mail(to_users, cc_users, title, issue)
         
         #------------------------------------------------------------
         # send each files on dedicated mails
@@ -168,7 +186,7 @@ module IssueMailWithAttachments
               ml.deliver    # last deliver method will be called in caller - deliver_issue_edit method
               # plugin setting value: mail subject for attachment
               title2 = retrieve_and_eval_plugin_seting(issue, 'mail_subject_4_attachment', attachment:attachment)
-             ml = send_with_dedicated_mail(to_users, cc_users, title2, attachment)
+              ml = send_with_dedicated_mail(to_users, cc_users, title2, attachment, issue)
             end
           #end
         end
@@ -218,9 +236,8 @@ module IssueMailWithAttachments
         #-----------
         # mail
         #-----------
-        ml = mail :to => to_users,
-         :cc => cc_users,
-         :subject => title
+        ml = send_first_mail(to_users, cc_users, title, issue)
+
         #------------------------------------------------------------
         # send each files on dedicated mails
         #------------------------------------------------------------
@@ -233,8 +250,8 @@ module IssueMailWithAttachments
                 Rails.logger.debug "***  att on dedicated mail: #{attachment.filename}"
                 ml.deliver    # last deliver method will be called in caller - deliver_issue_edit method
                 # plugin setting value: mail subject for attachment
-              title2 = retrieve_and_eval_plugin_seting(issue, 'mail_subject_4_attachment', attachment:attachment, journal:journal, journal_detail:journal_detail)
-                ml = send_with_dedicated_mail(to_users, cc_users, title2, attachment)
+                title2 = retrieve_and_eval_plugin_seting(issue, 'mail_subject_4_attachment', attachment:attachment, journal:journal, journal_detail:journal_detail)
+                ml = send_with_dedicated_mail(to_users, cc_users, title2, attachment, issue)
               end
             end
           #end

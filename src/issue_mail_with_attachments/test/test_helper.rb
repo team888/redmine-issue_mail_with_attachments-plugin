@@ -32,6 +32,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../../../test/test_helper')
 #        p atts[num_att_mails - r].filename
         assert_equal eval("\"#{Setting.plugin_issue_mail_with_attachments[:mail_subject_4_attachment]}\"") + atts[num_att_mails - r].filename, m.subject
       end
+      assert_mail_headers(m, issue)
     end
     
     m = ActionMailer::Base.deliveries[-(num_att_mails +1)]
@@ -56,6 +57,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../../../test/test_helper')
           assert_equal eval("\"#{Setting.plugin_issue_mail_with_attachments[:mail_subject]}\""), m.subject 
         end
       end
+      assert_mail_headers(m, issue)
   end
 
   def assert_sent_with_no_attachments(issue:nil, title_wo_status:false)
@@ -69,6 +71,16 @@ require File.expand_path(File.dirname(__FILE__) + '/../../../test/test_helper')
           assert_equal eval("\"#{Setting.plugin_issue_mail_with_attachments[:mail_subject]}\""), m.subject 
         end
       end
+      assert_mail_headers(m, issue)
+  end
+  
+  def assert_mail_headers(mail, issue)
+    if issue
+      assert_equal issue.project.identifier.to_s, mail.header['X-Redmine-Project'].to_s
+      assert_equal issue.id.to_s, mail.header['X-Redmine-Issue-Id'].to_s
+      assert_equal issue.author.login.to_s, mail.header['X-Redmine-Issue-Author'].to_s
+      assert_equal issue.assigned_to.login.to_s, mail.header['X-Redmine-Issue-Assignee'].to_s if issue.assigned_to
+    end
   end
   
   def plugin_settings_init(raw_settings)

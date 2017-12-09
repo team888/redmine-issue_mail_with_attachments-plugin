@@ -5,7 +5,7 @@
 With this plugin, you can mail out new attachment files on Issue pages via issue notification mails.
 
 ## Installation
-1. Downloaded and extract plugin zip file.
+1. Downloaded plugin zip from [Redmine Plugins page](http://www.redmine.org/plugins/issue_mail_with_attachments) and extract it.
 2. Copy "issue_mail_with_attachments" folder under "src" folder into redmine's "plugins" folder.
 3. Restart your Redmine servers.
 
@@ -30,5 +30,4 @@ Japanese Configuration UI
 1. Manipulate Redmine issues as usual, issue attachment files are sent out with notification mails at the time of issue creation and update.
 
 ## Compatibility
-Redmine 3.0 to 3.4
-Ruby 2.0 or above
+Redmine 3.0 to 3.4, Ruby 2.0 and above
