@@ -1,0 +1,8 @@
+#source 'https://rubygems.org'
+
+group :test do
+	gem 'coveralls', require: false
+	#gem 'simplecov', "~> 0.9.1", :require => false, :group => :test
+	gem 'public_suffix', '2.0.5'
+	gem 'site_prism', '2.7'
+end

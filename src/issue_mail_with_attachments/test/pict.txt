@@ -1,0 +1,6 @@
+att_enabled: true, false
+attach_all: true, false
+prj_ctl_enabled: true, false
+mod_enabled: true, false
+cf_name_for_issue: aField, nil
+enabled_for_issue: true, false, nil

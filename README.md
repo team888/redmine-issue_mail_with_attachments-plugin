@@ -1,16 +1,21 @@
 # Redmine issue_mail_with_attachments plugin
+[![Build Status](https://travis-ci.org/team888/redmine-issue_mail_with_attachments-plugin.svg?branch=refactoring-testing)](https://travis-ci.org/team888/redmine-issue_mail_with_attachments-plugin)
+[![Coverage Status](https://coveralls.io/repos/github/team888/redmine-issue_mail_with_attachments-plugin/badge.svg?branch=refactoring-testing)](https://coveralls.io/github/team888/redmine-issue_mail_with_attachments-plugin?branch=refactoring-testing)
 
-With this plugin, you can send out newly attached files on issues via usual issue notification mails or dedicated mails as attachments.
+With this plugin, you can mail out new attachment files on Issue pages via issue notification mails.
 
 ## Installation
-1. Copy extracted plugin folder to redmine's plugins folder.
-2. Rename copied plugin folder to "issue_mail_with_attachments".
+1. Download a plugin zip from [Redmine Plugins page](http://www.redmine.org/plugins/issue_mail_with_attachments) and extract it.
+2. Copy "issue_mail_with_attachments" folder under "src" folder into redmine's "plugins" folder.
 3. Restart your Redmine servers.
 
 ## Setup
 1. Login to your redmine with admin privilege account.
 2. Open \[Administration] > [Plugins], click [Configure] link on [Issue Mail With Attachments plugin].
-3. Set configuration items as you want. Besides attachment settings such as enable/disable, advanced user can optionally change mail subject string by modifying template definition here.
+3. Set plugin configurations. Note:
+   - With disabling [Attach all files to notification] checkbox, each attachments are sent out via dedicated mails (default/recommend setting).
+   - If enabling [Enable project level control] checkbox, to enable plugin function in each projects, you need to enable [issue mail with attachments plugin] item in each project's Settings page.
+   - With entering custom filed name in [Custom field name to enable attachment] field, you can control each issue level attachment or not by enabling/disabling defined custom field (Boolean-format) of this name.
 
 Configuration UI
 ![UI image](ui.png "UI image")
@@ -25,4 +30,4 @@ Japanese Configuration UI
 1. Manipulate Redmine issues as usual, issue attachment files are sent out with notification mails at the time of issue creation and update.
 
 ## Compatibility
-Redmine 2.6 to 3.4 ( checked on 2.6, 3.3 and 3.4.2 so far )
+Redmine 3.0 to 3.4, Ruby 2.0 and above

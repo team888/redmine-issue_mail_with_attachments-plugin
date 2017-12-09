@@ -13,6 +13,29 @@
   </p>
 </fieldset>
 
+
+
+<fieldset>
+  <legend><%= t('view.issue_mail_with_attachments.legend_project_level_control') %></legend>
+  <p>
+    <label><%= t('view.issue_mail_with_attachments.enable_project_level_control') %></label>
+	<input type="checkbox" value="true" name="settings[enable_project_level_control]" <%= settings['enable_project_level_control'].to_s.eql?('true') ? 'checked="checked"' : '' %> />
+    <em><%= t('view.issue_mail_with_attachments.enable_project_level_control_desc') %></em>
+  </p>
+</fieldset>
+
+
+
+<fieldset>
+  <legend><%= t('view.issue_mail_with_attachments.legend_issue_level_control') %></legend>
+  <p>
+    <label><%= t('view.issue_mail_with_attachments.field_name_to_enable_att') %></label>
+	<input type="text" value="<%= settings['field_name_to_enable_att'] %>" name="settings[field_name_to_enable_att]" style='width:100%;'><br />
+    <em><%= t('view.issue_mail_with_attachments.field_name_to_enable_att_desc') %></em>
+</fieldset>
+
+
+
 <fieldset>
   <legend><%= t('view.issue_mail_with_attachments.legend_mail_subject_template') %></legend>
   <p><%= t('view.issue_mail_with_attachments.warning_mail_subject_template') %></p>

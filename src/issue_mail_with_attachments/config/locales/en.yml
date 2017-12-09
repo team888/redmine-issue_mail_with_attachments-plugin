@@ -10,6 +10,20 @@ en:
       attach_all_files_to_notification: "Attach all files to notification"
       attach_all_files_to_notification_desc: "Attach all files to original notification mail. NOTE: Notification will be rejected by mail server when attachment size exceed server limit. If you disable this checkbox, original notification mail is sent as it is and each files will be sent by own dedicated mail."
 
+      legend_project_level_control: "Project Level Control"
+      enable_project_level_control: "Enable project level control"
+      enable_project_level_control_desc: "After enabling this, you need to enable [issue mail with attachments plugin] in each project's Settings page to enable attachment function of this plugin."
+      
+      
+      legend_issue_level_control: "Issue Level Control"
+      field_name_to_enable_att: "Custom field name to enable attachment"
+      field_name_to_enable_att_desc: "After enabling this and define Boolean-format custom field named above for the issue page of any projects, attachment function of this plugin works only if defined field is ON state on each issue pages. It means you can make defined field ON if need attachments or OFF if no attachments needed. Defined boolean field can be any of drop-down list/checkboxes/radio buttons with default value you want. Projects which not assigned defined field are not affected by this setting."
+      
+      
+      attach_only_for_project: "Only for these projects"
+      attach_only_for_project_desc: "Only send Attachments for the following projects (comma separated)"
+
+      
       legend_mail_subject_template: "Mail Subject Template"
       warning_mail_subject_template: "This section is for advanced user only. Need knowledge of Ruby object access notation etc for subject string generation."
       
