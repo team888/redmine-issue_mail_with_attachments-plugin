@@ -1,12 +1,19 @@
 
 module IssueMailWithAttachments
   module MailerPatch
-#    def self.included(base)
-#      base.send(:prepend, InstanceMethods)
-#
-#    end
+    def self.included(base)
+      base.send(:include, InstanceMethods)
 
-#    module InstanceMethods
+      base.class_eval do
+        unloadable
+        alias_method :issue_add_without_attachments, :issue_add
+        alias_method :issue_add, :issue_add_with_attachments
+        alias_method :issue_edit_without_attachments, :issue_edit
+        alias_method :issue_edit, :issue_edit_with_attachments
+      end
+    end
+
+    module InstanceMethods
 
       #=========================================================
       # helper method to set logger level
@@ -97,13 +104,12 @@ module IssueMailWithAttachments
       #=========================================================
       # send with dedicated mail
       #=========================================================
-      def send_first_mail(to_users, cc_users, title, issue)
+      def send_first_mail(user, title, issue)
         redmine_headers 'Project' => issue.project.identifier,
                     'Issue-Id' => issue.id,
                     'Issue-Author' => issue.author.login
         redmine_headers 'Issue-Assignee' => issue.assigned_to.login if issue.assigned_to
-        ml = mail :to => to_users,
-         :cc => cc_users,
+        ml = mail :to => user,
          :subject => title
         return ml
       end
@@ -111,7 +117,7 @@ module IssueMailWithAttachments
       #=========================================================
       # send with dedicated mail
       #=========================================================
-      def send_with_dedicated_mail(to_users, cc_users, title, attachment, issue)
+      def send_with_dedicated_mail(user, title, attachment, issue)
         initialize
         attachments[attachment.filename] = File.binread(attachment.diskfile)
         new_title = title + attachment.filename
@@ -121,8 +127,7 @@ module IssueMailWithAttachments
                     'Issue-Author' => issue.author.login
         redmine_headers 'Issue-Assignee' => issue.assigned_to.login if issue.assigned_to
 
-        ml = mail( :to => to_users,
-          :cc => cc_users,
+        ml = mail( :to => user,
           :subject => new_title
         ) do |format|
           format.text { render plain: attachment.filename }
@@ -134,14 +139,13 @@ module IssueMailWithAttachments
       #=========================================================
       # monkey patch for issue_add method of Mailer class
       #=========================================================
-      def issue_add(to_users, issue)
+      def issue_add_with_attachments(user, issue)
         prev_logger_lvl = set_logger_level
         Rails.logger.info "--- def issue_add_with_attachments ------"
-        cc_users = nil
         #------------------------------------------------------------
         # call original method
         #------------------------------------------------------------
-        ml = super(to_users, issue)
+        ml = issue_add_without_attachments(user, issue)
 
         #------------------------------------------------------------
         # evaluate plugin settings
@@ -168,7 +172,7 @@ module IssueMailWithAttachments
         #-----------
         # mail
         #-----------
-        ml = send_first_mail(to_users, cc_users, title, issue)
+        ml = send_first_mail(user, title, issue)
         
         #------------------------------------------------------------
         # send each files on dedicated mails
@@ -182,7 +186,7 @@ module IssueMailWithAttachments
               ml.deliver    # last deliver method will be called in caller - deliver_issue_edit method
               # plugin setting value: mail subject for attachment
               title2 = retrieve_and_eval_plugin_seting(issue, 'mail_subject_4_attachment', attachment:attachment)
-              ml = send_with_dedicated_mail(to_users, cc_users, title2, attachment, issue)
+              ml = send_with_dedicated_mail(user, title2, attachment, issue)
             end
           #end
         end
@@ -192,19 +196,19 @@ module IssueMailWithAttachments
       #=========================================================
       # monkey patch for issue_edit method of Mailer class
       #=========================================================
-      def issue_edit(to_users, journal)
+      def issue_edit_with_attachments(user, journal)
         prev_logger_lvl = set_logger_level
         Rails.logger.info "--- def issue_edit_with_attachments ------"
-        cc_users = nil
         #------------------------------------------------------------
         # call original method
         #------------------------------------------------------------
-        ml = super(to_users, journal)
+        ml = issue_edit_without_attachments(user, journal)
         issue = journal.journalized
 
         #------------------------------------------------------------
         # evaluate plugin settings
         #------------------------------------------------------------
+        issue = journal.issue
         ps = retrieve_plugin_settings(issue)
         with_att = evaluate_attach_or_not(ps)
 
@@ -233,7 +237,7 @@ module IssueMailWithAttachments
         #-----------
         # mail
         #-----------
-        ml = send_first_mail(to_users, cc_users, title, issue)
+        ml = send_first_mail(user, title, issue)
 
         #------------------------------------------------------------
         # send each files on dedicated mails
@@ -248,14 +252,14 @@ module IssueMailWithAttachments
                 ml.deliver    # last deliver method will be called in caller - deliver_issue_edit method
                 # plugin setting value: mail subject for attachment
                 title2 = retrieve_and_eval_plugin_seting(issue, 'mail_subject_4_attachment', attachment:attachment, journal:journal, journal_detail:journal_detail)
-                ml = send_with_dedicated_mail(to_users, cc_users, title2, attachment, issue)
+                ml = send_with_dedicated_mail(user, title2, attachment, issue)
               end
             end
           #end
         end
         Rails.logger.level = prev_logger_lvl if prev_logger_lvl
       end
-#    end
+    end
   end
 end
 

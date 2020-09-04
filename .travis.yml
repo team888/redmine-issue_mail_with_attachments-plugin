@@ -8,8 +8,7 @@ rvm:
 branches:
   only:
     - master
-    - refactoring-testing
-    - ver4support
+    - ver4support_merge
 env:
   - REDMINE_VERSION=4.0-stable VERBOSE=yes
   - REDMINE_VERSION=4.1-stable VERBOSE=yes

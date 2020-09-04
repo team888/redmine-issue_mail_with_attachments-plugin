@@ -48,7 +48,7 @@ require "issue_mail_with_attachments/mailer_patch.rb"
 Rails.configuration.to_prepare do
   require_dependency 'mailer'
   # load patch module
-  unless Mailer.included_modules.include? IssueMailWithAttachments::MailerPatch  # https://bugs.ruby-lang.org/issues/8026
-    Mailer.send(:prepend, IssueMailWithAttachments::MailerPatch)
+  unless Mailer.included_modules.include? IssueMailWithAttachments::MailerPatch
+    Mailer.send(:include, IssueMailWithAttachments::MailerPatch)
   end
 end
