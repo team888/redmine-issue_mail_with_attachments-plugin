@@ -20,7 +20,7 @@ case $REDMINE_VERSION in
           export MIGRATE_PLUGINS=db:migrate_plugins
           export REDMINE_TARBALL=https://github.com/redmine/redmine/archive/$REDMINE_VERSION.tar.gz
           ;;
-  2.* | 3.*)  export PATH_TO_PLUGINS=./plugins # for redmine 2.x and 3.x
+  2.* | 3.* | 4.*)  export PATH_TO_PLUGINS=./plugins # for redmine 2.x, 3.x and 4.x
           export GENERATE_SECRET=generate_secret_token
           export MIGRATE_PLUGINS=redmine:plugins:migrate
           export REDMINE_TARBALL=https://github.com/redmine/redmine/archive/$REDMINE_VERSION.tar.gz
@@ -64,15 +64,29 @@ run_tests() {
     TRACE=--trace
   fi
 
-  echo "--- test start ------------------------"
-  script -e -c "RUBYOPT=-W0 COVERALL4MYPLUGIN=true bundle exec rake redmine:plugins:test NAME="$PLUGIN $VERBOSE
-  #--- added for ui test ---
-#  if [[ "$REDMINE_VERSION" =~ ^(3.0|3.1)[\-\.] ]]; then
-#    echo "bypass ui test for redmine 3.0 or 3.1"
-#  else
-    echo "--- UI test start ------------------------"
-    script -e -c "RUBYOPT=-W0 bundle exec rake test TEST=plugins/$PLUGIN/test/ui/**/*_test.rb" $VERBOSE
-#  fi
+#  echo "--- test start ------------------------"
+#  script -e -c "RUBYOPT=-W0 COVERALL4MYPLUGIN=true bundle exec rake redmine:plugins:test NAME="$PLUGIN $VERBOSE
+
+  echo "--- unit test start ------------------------"
+#  script -e -c "RUBYOPT=-W0 COVERALL4MYPLUGIN=true bundle exec rake redmine:plugins:test:units NAME="$PLUGIN $VERBOSE
+#   script -e -c "RUBYOPT=-W0 COVERALL4MYPLUGIN=true bundle exec rake test TEST=plugins/issue_mail_with_attachments/test/unit/*_test.rb"
+   script -e -c "RUBYOPT=-W0 COVERALL4MYPLUGIN=true bundle exec rake test TEST=plugins/issue_mail_with_attachments/test/unit/mailer_patch_edit_status_test.rb"
+   script -e -c "RUBYOPT=-W0 COVERALL4MYPLUGIN=true bundle exec rake test TEST=plugins/issue_mail_with_attachments/test/unit/mailer_patch_edit_test.rb"
+   script -e -c "RUBYOPT=-W0 COVERALL4MYPLUGIN=true bundle exec rake test TEST=plugins/issue_mail_with_attachments/test/unit/mailer_patch_orig_issue_test.rb"
+   script -e -c "RUBYOPT=-W0 COVERALL4MYPLUGIN=true bundle exec rake test TEST=plugins/issue_mail_with_attachments/test/unit/mailer_patch_orig_journal_test.rb"
+   script -e -c "RUBYOPT=-W0 COVERALL4MYPLUGIN=true bundle exec rake test TEST=plugins/issue_mail_with_attachments/test/unit/mailer_patch_test.rb"
+   script -e -c "RUBYOPT=-W0 COVERALL4MYPLUGIN=true bundle exec rake test TEST=plugins/issue_mail_with_attachments/test/unit/mailer_patch_add_test.rb"
+
+  echo "--- function test start ------------------------"
+#  script -e -c "RUBYOPT=-W0 COVERALL4MYPLUGIN=true bundle exec rake redmine:plugins:test:units NAME="$PLUGIN $VERBOSE
+   script -e -c "RUBYOPT=-W0 COVERALL4MYPLUGIN=true bundle exec rake test TEST=plugins/issue_mail_with_attachments/test/functional/*_test.rb"
+
+  echo "--- integration test start ------------------------"
+#  script -e -c "RUBYOPT=-W0 COVERALL4MYPLUGIN=true bundle exec rake redmine:plugins:test:units NAME="$PLUGIN $VERBOSE
+   script -e -c "RUBYOPT=-W0 COVERALL4MYPLUGIN=true bundle exec rake test TEST=plugins/issue_mail_with_attachments/test/integration/*_test.rb"
+
+  echo "--- UI test start ------------------------"
+  script -e -c "RUBYOPT=-W0 xvfb-run bundle exec rake test TEST=plugins/$PLUGIN/test/ui/**/*_test.rb" $VERBOSE
 }
 
 uninstall() {
@@ -93,7 +107,7 @@ run_install() {
   cd $PATH_TO_REDMINE	
   
   #mod ver in gemfile
-  sed -i -e "/public_suffix/d" -e "s/.*selenium.*/  gem \'selenium-webdriver\', \'2\.53\.4\'/" -e "s/.*capybara.*/  gem \'capybara\', \'2\.7\.1\'/" ./Gemfile
+  sed -i -e "/public_suffix/d" ./Gemfile
   cat ./Gemfile
  
   # create a link to the plugin, but avoid recursive link.

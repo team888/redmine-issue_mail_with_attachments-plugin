@@ -27,10 +27,10 @@ Redmine::Plugin.register :issue_mail_with_attachments do
   name 'Issue Mail With Attachments plugin'
   author 'team888'
   description 'With this plugin, you can send out newly attached files on issues via usual issue notification mails or dedicated mails as attachments.'
-  version '0.9.0'
+  version '0.9.5'
   url 'http://www.redmine.org/plugins/issue_mail_with_attachments'
   author_url 'https://github.com/team888'
-  requires_redmine :version_or_higher => '3.0'
+  requires_redmine :version_or_higher => '4.0'
 
   settings :default => default_settings, :partial => 'settings/issue_mail_with_attachments_settings'
   
@@ -48,7 +48,7 @@ require "issue_mail_with_attachments/mailer_patch.rb"
 Rails.configuration.to_prepare do
   require_dependency 'mailer'
   # load patch module
-  unless Mailer.included_modules.include? IssueMailWithAttachments::MailerPatch
-    Mailer.send(:include, IssueMailWithAttachments::MailerPatch)
+  unless Mailer.included_modules.include? IssueMailWithAttachments::MailerPatch  # https://bugs.ruby-lang.org/issues/8026
+    Mailer.send(:prepend, IssueMailWithAttachments::MailerPatch)
   end
 end

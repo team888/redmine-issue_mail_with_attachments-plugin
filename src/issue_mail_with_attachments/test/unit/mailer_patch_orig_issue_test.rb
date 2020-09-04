@@ -28,7 +28,7 @@ class MailPatchAddOrigTest < ActiveSupport::TestCase
                       :subject => 'test_create', :estimated_hours => '1:30')
     with_settings :notified_events => %w(issue_added) do
       assert issue.save
-      assert_equal 1, ActionMailer::Base.deliveries.size
+      assert_equal 2, ActionMailer::Base.deliveries.size
     end
   end
 
@@ -40,7 +40,7 @@ class MailPatchAddOrigTest < ActiveSupport::TestCase
                       :subject => 'test_create', :estimated_hours => '1:30')
     with_settings :notified_events => %w(issue_added issue_updated) do
       assert issue.save
-      assert_equal 1, ActionMailer::Base.deliveries.size
+      assert_equal 2, ActionMailer::Base.deliveries.size
     end
   end
 

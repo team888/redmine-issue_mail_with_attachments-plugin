@@ -68,55 +68,28 @@ class MailerPatchIssuesTest < Redmine::IntegrationTest
     with_settings( {:notified_events => %w(issue_added issue_updated),
       :plugin_issue_mail_with_attachments => plugin_settings
     }) do
-      if Redmine::VERSION::MAJOR >= 3 and Redmine::VERSION::MINOR >= 4
 
-        issue = new_record(Issue) do
-          post '/projects/ecookbook/issues', :params => {
-              :issue => {
-                :tracker_id => "1",
-                :start_date => "2006-12-26",
-                :priority_id => "4",
-                :subject => "new test issue",
-                :category_id => "",
-                :description => "new issue",
-                :done_ratio => "0",
-                :due_date => "",
-                :assigned_to_id => "",
-                :custom_field_values => {cf.id => 1}
-                },
-              :attachments => {
-                '1' => {'file' => files[0], 'description' => 'png file'},
-                '2' => {'file' => files[1], 'description' => 'This is an attachment, iso8859-1.txt'}
-              }
+      issue = new_record(Issue) do
+        post '/projects/ecookbook/issues', :params => {
+            :issue => {
+              :tracker_id => "1",
+              :start_date => "2006-12-26",
+              :priority_id => "4",
+              :subject => "new test issue",
+              :category_id => "",
+              :description => "new issue",
+              :done_ratio => "0",
+              :due_date => "",
+              :assigned_to_id => "",
+              :custom_field_values => {cf.id => 1}
+              },
+            :attachments => {
+              '1' => {'file' => files[0], 'description' => 'png file'},
+              '2' => {'file' => files[1], 'description' => 'This is an attachment, iso8859-1.txt'}
             }
-        end
-
-      else
-
-        #issue = new_record(Issue) do  # mod for < redmine 3.4
-          post '/projects/ecookbook/issues', #:params => {  # mod for < redmine 3.4
-              :issue => {
-                :tracker_id => "1",
-                :start_date => "2006-12-26",
-                :priority_id => "4",
-                :subject => "new test issue",
-                :category_id => "",
-                :description => "new issue",
-                :done_ratio => "0",
-                :due_date => "",
-                :assigned_to_id => "",
-                :custom_field_values => {cf.id => 1}
-                },
-              :attachments => {
-                '1' => {'file' => files[0], 'description' => 'png file'},
-                '2' => {'file' => files[1], 'description' => 'This is an attachment, iso8859-1.txt'}
-              }
-            #} # mod for < redmine 3.4
-        #end  # mod for < redmine 3.4
-        # find created issue  # mod for < redmine 3.4
-        issue = Issue.find_by_subject("new test issue")  # mod for < redmine 3.4
-        assert_kind_of Issue, issue  # mod for < redmine 3.4
+          }
       end
+        
     end
     # check redirection
     assert_redirected_to :controller => 'issues', :action => 'show', :id => issue
@@ -130,7 +103,7 @@ class MailerPatchIssuesTest < Redmine::IntegrationTest
     atts = []
     atts <<  Attachment.new(:file => files[0])
     atts <<  Attachment.new(:file => files[1])
-    assert_sent_with_dedicated_mails num_att_mails:2, atts:atts, issue:Issue.find(issue.id), title_wo_status:false
+    assert_sent_with_dedicated_mails num_att_mails:2, atts:atts, issue:Issue.find(issue.id), title_wo_status:false, recipients:["jsmith@somenet.foo", "dlopper@somenet.foo"]
 
     #===============
     # edit
@@ -140,35 +113,16 @@ class MailerPatchIssuesTest < Redmine::IntegrationTest
     with_settings( {:notified_events => %w(issue_added issue_updated),
       :plugin_issue_mail_with_attachments => plugin_settings
     }) do
-      if Redmine::VERSION::MAJOR >= 3 and Redmine::VERSION::MINOR >= 4
 
-        attachments = new_records(Attachment, 2) do
-          put '/issues/' + issue.id.to_s, :params => {
-              :issue => {:notes => 'Some notes', :custom_field_values => {cf.id => 1}},
-              :attachments => {
-                '1' => {'file' => uploaded_test_file("japanese-utf-8.txt", "text/plain"), 'description' => 'jpn file'},
-                '2' => {'file' => uploaded_test_file('testfile.txt', 'text/plain'), 'description' => 'This is an attachment'}
-              }
+      attachments = new_records(Attachment, 2) do
+        put '/issues/' + issue.id.to_s, :params => {
+            :issue => {:notes => 'Some notes', :custom_field_values => {cf.id => 1}},
+            :attachments => {
+              '1' => {'file' => uploaded_test_file("japanese-utf-8.txt", "text/plain"), 'description' => 'jpn file'},
+              '2' => {'file' => uploaded_test_file('testfile.txt', 'text/plain'), 'description' => 'This is an attachment'}
             }
-          assert_redirected_to "/issues/" + issue.id.to_s
-        end
-      
-      else
-
-        #attachments = new_records(Attachment, 2) do # mod for < redmine 3.4
-          put '/issues/' + issue.id.to_s, #:params => { # mod for < redmine 3.4
-              :issue => {:notes => 'Some notes', :custom_field_values => {cf.id => 1}},
-              :attachments => {
-                '1' => {'file' => uploaded_test_file("japanese-utf-8.txt", "text/plain"), 'description' => 'jpn file'},
-                '2' => {'file' => uploaded_test_file('testfile.txt', 'text/plain'), 'description' => 'This is an attachment'}
-              }
-            #} # mod for < redmine 3.4
-          assert_redirected_to "/issues/" + issue.id.to_s
-        #end # mod for < redmine 3.4
-        attachments = []
-        attachments << Issue.find(issue.id).attachments.find_by_filename("japanese-utf-8.txt")
-        attachments << Issue.find(issue.id).attachments.find_by_filename("testfile.txt")
-        
+          }
+        assert_redirected_to "/issues/" + issue.id.to_s
       end
 
       assert_equal Issue.find(issue.id), attachments[1].container
@@ -179,7 +133,7 @@ class MailerPatchIssuesTest < Redmine::IntegrationTest
       # verify that the attachment was written to disk
       assert File.exist?(attachments[1].diskfile)
       
-      assert_sent_with_dedicated_mails num_att_mails:2, atts:attachments, issue:Issue.find(issue.id), title_wo_status:true
+      assert_sent_with_dedicated_mails num_att_mails:2, atts:attachments, issue:Issue.find(issue.id), title_wo_status:true, recipients:["jsmith@somenet.foo", "dlopper@somenet.foo"]
     end
     
     # remove the attachments

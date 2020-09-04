@@ -1,4 +1,4 @@
-require File.expand_path('../../../../../test/ui/base', __FILE__)
+require File.expand_path('../../../../../test/application_system_test_case', __FILE__)
 require File.expand_path('../../test_helper', __FILE__)
 
 # Page object of list of plugins page
@@ -24,7 +24,9 @@ class IssueMailAttPluginSettingPage < SitePrism::Page
   
 end
 
-class Redmine::UiTest::IssuesTest < Redmine::UiTest::Base
+class IssuesTest < ApplicationSystemTestCase
+#  driven_by :selenium, using: :firefox
+  
   fixtures :projects, :users, :email_addresses, :roles, :members, :member_roles,
            :trackers, :projects_trackers, :enabled_modules, :issue_statuses, :issues,
            :enumerations, :custom_fields, :custom_values, :custom_fields_trackers,
