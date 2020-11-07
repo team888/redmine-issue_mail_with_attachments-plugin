@@ -3,6 +3,6 @@
 group :test do
 	gem 'coveralls', require: false
 	#gem 'simplecov', "~> 0.9.1", :require => false, :group => :test
-	gem 'public_suffix', '4.0.5'
+	gem 'public_suffix', '4.0.6'
 	gem 'site_prism', '3.5'
 end
