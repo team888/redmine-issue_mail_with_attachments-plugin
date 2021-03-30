@@ -1,19 +1,22 @@
 language: ruby
 rvm:
+  - 2.6
+  - 2.5
+  - 2.4
   - 2.3
-  - 2.2
-  - 2.1
-  - 2.0
+
 branches:
   only:
     - master
     - refactoring-testing
+    - ver4support
 env:
-  - REDMINE_VERSION=3.4-stable VERBOSE=yes
-  - REDMINE_VERSION=3.3-stable VERBOSE=yes
-  - REDMINE_VERSION=3.2-stable VERBOSE=yes
-  - REDMINE_VERSION=3.1-stable VERBOSE=yes
-  - REDMINE_VERSION=3.0-stable VERBOSE=yes
+  - REDMINE_VERSION=4.0-stable VERBOSE=yes
+  - REDMINE_VERSION=4.1-stable VERBOSE=yes
+
+addons:
+  firefox: latest-esr
+  chrome: stable
 script:
   - export PLUGIN=issue_mail_with_attachments
   - export WORKSPACE=$(pwd)/workspace
@@ -26,7 +29,18 @@ script:
   - bash -x ./.travis-init.sh -u || exit 1
 
 before_install:
-  - "phantomjs --version"
-  
+# - wget https://github.com/mozilla/geckodriver/releases/download/v0.24.0/geckodriver-v0.24.0-linux64.tar.gz
+# - mkdir geckodriver
+# - tar -xzf geckodriver-v0.24.0-linux64.tar.gz -C geckodriver
+# - export PATH=$PATH:$PWD/geckodriver
+# - geckodriver --version
+# - export MOZ_HEADLESS=1
+ 
+ - export LATEST_CHROMEDRIVER="$(curl -s https://chromedriver.storage.googleapis.com/LATEST_RELEASE)"
+ - curl -L -s -o /tmp/chromedriver.zip "https://chromedriver.storage.googleapis.com/${LATEST_CHROMEDRIVER}/chromedriver_linux64.zip"
+ - mkdir chromedriver
+ - unzip /tmp/chromedriver.zip -d chromedriver
+ - export PATH=$PATH:$PWD/chromedriver
+ - chromedriver --version
 before_script:
-  - phantomjs --webdriver=4444 >/dev/null 2>&1 & 
+

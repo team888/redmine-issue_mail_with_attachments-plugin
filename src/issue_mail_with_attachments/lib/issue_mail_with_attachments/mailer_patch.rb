@@ -1,17 +1,12 @@
 
 module IssueMailWithAttachments
   module MailerPatch
-    def self.included(base)
-      base.send(:include, InstanceMethods)
+#    def self.included(base)
+#      base.send(:prepend, InstanceMethods)
+#
+#    end
 
-      base.class_eval do
-        unloadable
-        alias_method_chain :issue_add, :attachments
-        alias_method_chain :issue_edit, :attachments
-      end
-    end
-
-    module InstanceMethods
+#    module InstanceMethods
 
       #=========================================================
       # helper method to set logger level
@@ -139,13 +134,14 @@ module IssueMailWithAttachments
       #=========================================================
       # monkey patch for issue_add method of Mailer class
       #=========================================================
-      def issue_add_with_attachments(issue, to_users, cc_users)
+      def issue_add(to_users, issue)
         prev_logger_lvl = set_logger_level
         Rails.logger.info "--- def issue_add_with_attachments ------"
+        cc_users = nil
         #------------------------------------------------------------
         # call original method
         #------------------------------------------------------------
-        ml = issue_add_without_attachments(issue, to_users, cc_users)
+        ml = super(to_users, issue)
 
         #------------------------------------------------------------
         # evaluate plugin settings
@@ -196,13 +192,14 @@ module IssueMailWithAttachments
       #=========================================================
       # monkey patch for issue_edit method of Mailer class
       #=========================================================
-      def issue_edit_with_attachments(journal, to_users, cc_users)
+      def issue_edit(to_users, journal)
         prev_logger_lvl = set_logger_level
         Rails.logger.info "--- def issue_edit_with_attachments ------"
+        cc_users = nil
         #------------------------------------------------------------
         # call original method
         #------------------------------------------------------------
-        ml = issue_edit_without_attachments(journal, to_users, cc_users)
+        ml = super(to_users, journal)
         issue = journal.journalized
 
         #------------------------------------------------------------
@@ -258,7 +255,7 @@ module IssueMailWithAttachments
         end
         Rails.logger.level = prev_logger_lvl if prev_logger_lvl
       end
-    end
+#    end
   end
 end
 
